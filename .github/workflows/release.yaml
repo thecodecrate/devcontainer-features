@@ -1,10 +1,14 @@
 name: "Release dev container features & Generate Documentation"
+
 on:
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["CI - Test Features"]  # Ensure this matches the name in test.yaml
+    types:
+      - completed
 
 jobs:
   deploy:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -19,29 +23,48 @@ jobs:
           publish-features: "true"
           base-path-to-features: "./src"
           generate-docs: "true"
-          
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Authenticate GitHub CLI
+        uses: cli/cli@v2
+        with:
+          version: latest
+
+      - name: Setup GitHub CLI Authentication
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
       - name: Create PR for Documentation
         id: push_image_info
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
           echo "Start."
-          # Configure git and Push updates
-          git config --global user.email github-actions[bot]@users.noreply.github.com
-          git config --global user.name github-actions[bot]
+          # Configure git
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
           git config pull.rebase false
-          branch=automated-documentation-update-$GITHUB_RUN_ID
+          # Create a new branch
+          branch=automated-documentation-update-${{ github.run_id }}
           git checkout -b $branch
-          message='Automated documentation update'
-          # Add / update and commit
-          git add */**/README.md
-          git commit -m 'Automated documentation update [skip ci]' || export NO_UPDATES=true
-          # Push
-          if [ "$NO_UPDATES" != "true" ] ; then
-              git push origin "$branch"
-              gh pr create --title "$message" --body "$message"
+          # Add changes
+          git add src/**/README.md
+          # Commit changes
+          git commit -m "📝 docs: update feature READMEs [skip ci]"
+          # Push branch
+          git push origin $branch
+          # Create Pull Request using GitHub CLI
+          gh pr create --title "📄 Update Feature Documentation" --body "Automated update of feature documentation." --head $branch --base main
+
+      - name: Automatically Merge PR
+        run: |
+          # Wait briefly to ensure the PR is created
+          sleep 10
+          # Find the PR created by the previous step
+          pr_number=$(gh pr list --head automated-documentation-update-${{ github.run_id }} --limit 1 --json number --jq '.[0].number')
+
+          if [ -n "$pr_number" ]; then
+            # Merge the PR
+            gh pr merge $pr_number --auto --squash --delete-branch --subject "📄 Update Feature Documentation"
+          else
+            echo "No Pull Request found to merge."
           fi
