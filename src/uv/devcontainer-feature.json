@@ -1,0 +1,18 @@
+{
+    "id": "uv",
+    "version": "1.0.0",
+    "name": "UV",
+    "options": {
+        "version": {
+            "type": "string",
+            "proposals": [
+                "latest"
+            ],
+            "default": "latest",
+            "description": "Select or enter an UV version."
+        }
+    },
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/common-utils"
+    ]
+}
