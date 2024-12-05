@@ -1,8 +1,0 @@
-{
-    "uv": {
-        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-        "features": {
-            "uv": {}
-        }
-    }
-}
