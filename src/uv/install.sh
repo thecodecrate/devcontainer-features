@@ -64,7 +64,7 @@ check_packages() {
 # Install UV if it's missing
 if ! uv --version &> /dev/null ; then
     # Install dependencies
-    check_packages curl unzip tar
+    check_packages curl unzip tar ca-certificates
 
     UV_CACHE_SCRIPT="$(cat << 'EOF'
 if [ -t 1 ] && [ "${TERM_PROGRAM}" = "vscode" ]; then
