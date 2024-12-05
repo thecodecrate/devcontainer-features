@@ -51,6 +51,8 @@ jobs:
           fi
 
       - name: Automatically Merge PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Wait briefly to ensure the PR is created
           sleep 10
