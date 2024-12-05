@@ -26,11 +26,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Authenticate GitHub CLI
-        uses: cli/cli@v2
-        with:
-          version: latest
-
       - name: Setup GitHub CLI Authentication
         run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
