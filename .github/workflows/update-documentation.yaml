@@ -13,7 +13,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    if: "github.ref == 'refs/heads/main'"
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
 
@@ -38,11 +38,11 @@ jobs:
 
           branch=automated-documentation-update-$GITHUB_RUN_ID
           git checkout -b $branch
-          message='📄 Automated documentation update'
+          message='📝 docs: automated update of feature READMEs [skip ci]'
 
           # Add / update and commit
           git add */**/README.md
-          git commit -m '📝 docs: automated update of feature READMEs [skip ci]' || export NO_UPDATES=true
+          git commit -m "$message" || export NO_UPDATES=true
 
           # Push
           if [ "$NO_UPDATES" != "true" ] ; then
@@ -61,7 +61,7 @@ jobs:
 
           if [ -n "$pr_number" ]; then
             # Merge the PR
-            gh pr merge $pr_number --auto --squash --delete-branch --subject "📄 Automated documentation update"
+            gh pr merge $pr_number --auto --squash --delete-branch --subject "📝 docs: automated update of feature READMEs [skip ci]"
           else
             echo "No Pull Request found to merge."
           fi
