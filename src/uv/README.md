@@ -1,7 +1,7 @@
 
 # UV (uv)
 
-
+A fast Python package manager written in Rust. Replaces pip, poetry, virtualenv, and more.
 
 ## Example Usage
 
