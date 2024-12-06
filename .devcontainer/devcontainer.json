@@ -1,25 +1,48 @@
 {
-    "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
-    "customizations": {
-        "vscode": {
-            "settings": {
-                "json.schemas": [
-                    {
-                        "fileMatch": [
-                            "*/devcontainer-feature.json"
-                        ],
-                        "url": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainerFeature.schema.json"
-                    }
-                ]
-            },
-            "extensions": [
-                "mads-hartmann.bash-ide-vscode"
-            ]
+  "name": "TheCodeCrate's Devcontainer-Features",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "mads-hartmann.bash-ide-vscode",
+        "DavidAnson.vscode-markdownlint",
+        "github.copilot",
+        "github.copilot-chat",
+        "github.vscode-github-actions",
+        "tamasfe.even-better-toml"
+      ],
+      "settings": {
+        "json.schemas": [
+          {
+            "fileMatch": [
+              "*/devcontainer-feature.json"
+            ],
+            "url": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainerFeature.schema.json"
+          }
+        ],
+        "editor.linkedEditing": true,
+        "editor.formatOnSave": true,
+        "editor.rulers": [
+          80,
+          100
+        ],
+        "editor.guides.bracketPairs": true,
+        "editor.guides.highlightActiveIndentation": true,
+        "explorer.sortOrderLexicographicOptions": "upper",
+        "terminal.integrated.shell.linux": "/bin/zsh",
+        "[toml]": {
+          "editor.defaultFormatter": "tamasfe.even-better-toml",
+          "editor.formatOnSave": true
+        },
+        "[markdown]": {
+          "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
         }
-    },
-    "features": {
-        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
-    },
-    "remoteUser": "node",
-    "updateContentCommand": "npm install -g @devcontainers/cli"
+      }
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "remoteUser": "node",
+  "updateContentCommand": "npm install -g @devcontainers/cli"
 }

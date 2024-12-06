@@ -2,6 +2,7 @@
     "id": "uv",
     "version": "1.0.0",
     "name": "UV",
+    "description": "A fast Python package manager written in Rust. Replaces pip, poetry, virtualenv, and more.",
     "options": {
         "version": {
             "type": "string",
