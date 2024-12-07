@@ -67,7 +67,7 @@ if ! uv --version &> /dev/null ; then
     check_packages curl unzip tar ca-certificates
 
     UV_CACHE_SCRIPT="$(cat << 'EOF'
-if [ -t 1 ] && [ "${TERM_PROGRAM}" = "vscode" ]; then
+if [[ ( -t 1 && "${TERM_PROGRAM}" = "vscode" ) || "${CI}" = "true" ]]; then
     export UV_CACHE_DIR="$PWD/.uv_cache"
     mkdir -p "$UV_CACHE_DIR"
 fi
