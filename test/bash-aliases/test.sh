@@ -1,29 +1,41 @@
-#!/bin/bash
+#!/bin/zsh
 
-set -e
+set -euo pipefail
 
 # Import test library bundled with the devcontainer CLI
 source dev-container-features-test-lib
 
-# Simulate VS Code terminal by setting TERM_PROGRAM
-export TERM_PROGRAM="vscode"
+# Setup
+source ./setup.sh
 
-# Create the bash-aliases directory
-mkdir -p "$PWD/.devcontainer/etc/bash-aliases"
+get_title() {
+    local filename="$1"
 
-# Create a test alias file
-echo "alias testalias='echo Hello, World!'" > "$PWD/.devcontainer/etc/bash-aliases/test-aliases.sh"
+    # Extract the base filename without extension
+    title="$(basename "$file" .sh)"
+    # Remove optional prefix: number and dash (e.g., "00-"), and "test-"
+    title="${title#*[-]}"
+    title="${title#test-}"
+    # Replace non-alphanumeric characters with spaces
+    title="$(echo "$title" | sed 's/[^a-zA-Z0-9]/ /g')"
+    # Capitalize each word
+    title="$(echo "$title" | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)}1')"
 
-# Feature-specific tests
-check "alias is loaded" bash -ic "alias testalias | grep 'echo Hello, World!'"
-check "alias works" bash -ic "testalias | grep 'Hello, World!'"
+    echo "$title"
+}
 
-# Test when there's no bash-aliases directory.
-rm -rf "$PWD/.devcontainer/etc/bash-aliases"
-check "no bash-aliases directory" bash -ic "echo 'No errors'"
+# Run test cases
+for file in ./cases/*.sh; do
+    if [[ "$(basename "$file")" == "__before.sh" ]]; then
+        continue
+    fi
 
-# "testalias" alias should not be available anymore
-check "alias is not loaded" bash -ic "alias testalias 2>&1 | grep 'not found'"
+    title="$(get_title "$file")"
+
+    source ./cases/__before.sh
+
+    check "[$title]" zsh -i "$file"
+done
 
 # Report result
 reportResults

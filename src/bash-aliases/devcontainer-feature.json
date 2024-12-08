@@ -1,9 +1,9 @@
 {
     "id": "bash-aliases",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "name": "Bash Aliases",
     "description": "Loads custom bash aliases from your project's `.devcontainer/etc/bash-aliases` directory.",
-    "installsAfter": [
-        "ghcr.io/devcontainers/features/common-utils"
-    ]
+    "dependsOn": {
+        "ghcr.io/devcontainers/features/common-utils": {}
+    }
 }
