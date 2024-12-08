@@ -5,6 +5,8 @@ UPDATE_RC="${UPDATE_RC:-"true"}"
 set -eux
 export DEBIAN_FRONTEND=noninteractive
 
+FEATURE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 if [ "$(id -u)" -ne 0 ]; then
     echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
     exit 1
@@ -22,26 +24,8 @@ updaterc() {
     fi
 }
 
-# Bash-aliases loader
-SNIPPET_CONTENT=$(cat <<'EOF'
-# Only runs on terminal from inside vscode editor, or in CI
-if [[ ( -t 1 && "${TERM_PROGRAM}" = "vscode" ) || "${CI}" = "true" ]]; then
-    ALIASES_FOLDER="$PWD/.devcontainer/etc/bash-aliases"
-
-    # Dynamically load all *.sh files from ALIASES_FOLDER
-    if [ -d "$ALIASES_FOLDER" ]; then
-        for file in "$ALIASES_FOLDER/"*.sh; do
-            if [ -e "$file" ] && [ -r "$file" ]; then
-                source "$file"
-            fi
-        done
-    fi
-fi
-EOF
-)
-
-# Install loader
 echo "Installing Loader..."
-updaterc "${SNIPPET_CONTENT}"
+rc_content="$(cat "${FEATURE_DIR}/scripts/rc_snippet.sh")"
+updaterc "${rc_content}"
 
 echo "Done!"
