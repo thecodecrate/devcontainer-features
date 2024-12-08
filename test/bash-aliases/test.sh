@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 set -euo pipefail
 
@@ -30,11 +30,10 @@ for file in ./cases/*.sh; do
         continue
     fi
 
-    title="$(get_title "$file")"
-
     source ./cases/__before.sh
 
-    check "[$title]" zsh -i "$file"
+    title="$(get_title "$file")"
+    check "[$title]" bash -i "$file"
 done
 
 # Report result

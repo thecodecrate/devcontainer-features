@@ -5,6 +5,8 @@ USERNAME="${USERNAME:-"${_REMOTE_USER:-"automatic"}"}"
 UPDATE_RC="${UPDATE_RC:-"true"}"
 UV_INSTALL_DIR="${UV_INSTALL_DIR:-"~/.local/bin"}"
 
+FEATURE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 set -eux
 export DEBIAN_FRONTEND=noninteractive
 
@@ -66,20 +68,14 @@ if ! uv --version &> /dev/null ; then
     # Install dependencies
     check_packages curl unzip tar ca-certificates
 
-    UV_CACHE_SCRIPT="$(cat << 'EOF'
-if [[ ( -t 1 && "${TERM_PROGRAM}" = "vscode" ) || "${CI}" = "true" ]]; then
-    export UV_CACHE_DIR="$PWD/.uv_cache"
-    mkdir -p "$UV_CACHE_DIR"
-fi
-EOF
-)"
-    updaterc "${UV_CACHE_SCRIPT}"
+    rc_content="$(cat "${FEATURE_DIR}/scripts/rc_snippet.sh")"
+    updaterc "${rc_content}"
 
     mkdir -p $UV_INSTALL_DIR
     chown -R "${USERNAME}:${USERNAME}" "${UV_INSTALL_DIR}"
     chmod -R g+r+w "${UV_INSTALL_DIR}"
-
     find "${UV_INSTALL_DIR}" -type d -print0 | xargs -n 1 -0 chmod g+s
+
     echo "Installing UV..."
 
     UV_VERSION=$VERSION

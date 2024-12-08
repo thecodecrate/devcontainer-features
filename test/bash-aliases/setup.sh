@@ -1,7 +1,6 @@
-#!/bin/zsh
+#!/bin/bash
 
 set -euo pipefail
 
-# Simulate VS Code terminal and CI environment
+# Simulate VS Code terminal
 export TERM_PROGRAM="vscode"
-export CI="true"

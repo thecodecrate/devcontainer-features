@@ -1,6 +1,6 @@
 {
     "id": "bash-aliases",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "name": "Bash Aliases",
     "description": "Loads custom bash aliases from your project's `.devcontainer/etc/bash-aliases` directory.",
     "dependsOn": {
