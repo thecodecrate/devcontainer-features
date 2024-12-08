@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 ##
 # This file runs before each test case.
