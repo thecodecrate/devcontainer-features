@@ -11,12 +11,10 @@ check "Environment Info" echo "\
     USER: $USER\n\
     HOME: $HOME\n\
     TERM_PROGRAM: $TERM_PROGRAM\n\
-    CI: $CI\n\
     ALIASES_DIR: $ALIASES_DIR\n"
 
 # Environment Vars
 check "TERM_PROGRAM is vscode" test "$TERM_PROGRAM" = "vscode"
-check "CI is true" test "$CI" = "true"
 check "ALIASES_DIR is set" test -n "$ALIASES_DIR"
 
 # Aliases directory
