@@ -30,10 +30,9 @@ for file in ./cases/*.sh; do
         continue
     fi
 
-    title="$(get_title "$file")"
-
     source ./cases/__before.sh
 
+    title="$(get_title "$file")"
     check "[$title]" zsh -i "$file"
 done
 
