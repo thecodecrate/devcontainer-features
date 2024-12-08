@@ -1,5 +1,5 @@
-# Only runs on terminal from inside vscode editor
-if [ -t 1 ] && [ "${TERM_PROGRAM}" = "vscode" ]; then
+# Only runs on terminal from inside vscode editor, or in CI
+if [[ ( -t 1 && "${TERM_PROGRAM}" = "vscode" ) || "${CI}" = "true" ]]; then
     ALIASES_FOLDER="$PWD/.devcontainer/etc/bash-aliases"
 
     # Dynamically load all *.sh files from ALIASES_FOLDER
